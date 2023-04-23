@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { variaveis } from '../UI/variaveis';
 
 const Button = styled.button`
   width: 120px;
@@ -18,9 +20,9 @@ const Button = styled.button`
   }
 `;
 
-function ButtonAction({ backgroundColor ,color, children }) {
+function ButtonAction({ backgroundColor ,color, children, to }) {
     return (
-        <Button backgroundColor={backgroundColor} color={color}>{children}</Button>
+        <Button backgroundColor={backgroundColor} color={color}><Link style={ { textDecoration: 'none', color: variaveis.corWhite}} to={to}>{children}</Link></Button>
     )
 }
 

@@ -25,7 +25,7 @@ function Header() {
     return (
         <Cabecalho>
             <Logo />
-            <ButtonAction color={variaveis.corWhite} backgroundColor={variaveis.corGrayDark} >Novo Vídeo</ButtonAction>
+            <ButtonAction color={variaveis.corWhite} backgroundColor={variaveis.corGrayDark} to="/novovideo">Novo Vídeo</ButtonAction>
         </Cabecalho>
     )
 }

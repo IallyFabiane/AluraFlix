@@ -15,6 +15,7 @@ const corMobile = "#FFBA05";
 const corInovation = "#FF8C2A";
 const corUX = "#DC6EBE";
 const corDataScience = "#9CD33B";
+const corWhite = "#FFF";
 
 export const variaveis = {
     corPrimaria,
@@ -32,5 +33,6 @@ export const variaveis = {
     corMobile,
     corInovation,
     corUX,
-    corDataScience
+    corDataScience, 
+    corWhite
 };

@@ -1,6 +1,3 @@
-import ButtonAction from "../ButtonAction";
-import Logo from "../Logo";
-import { variaveis } from '../UI/variaveis';
 import styled from "styled-components";
 
 const Cabecalho = styled.header`
@@ -12,6 +9,7 @@ const Cabecalho = styled.header`
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-right: 32px;
 
     @media (min-width: 994px) {
         min-width: 1131px;
@@ -21,11 +19,10 @@ const Cabecalho = styled.header`
     }
 `;
 
-function Header() {
+function Header({children}) {
     return (
         <Cabecalho>
-            <Logo />
-            <ButtonAction color={variaveis.corWhite} backgroundColor={variaveis.corGrayDark} to="/novovideo">Novo Vídeo</ButtonAction>
+            {children}
         </Cabecalho>
     )
 }

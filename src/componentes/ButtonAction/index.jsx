@@ -13,16 +13,12 @@ const Button = styled.button`
   font-size: 16px;
   line-height: 24px;
   padding: 10px;
-  margin-right: 40px;
-
-  @media (min-width: 320px) and (max-width: 993px) {
-    display: none;
-  }
+  border-radius: 2px;
 `;
 
 function ButtonAction({ backgroundColor ,color, children, to }) {
     return (
-        <Button backgroundColor={backgroundColor} color={color}><Link style={ { textDecoration: 'none', color: variaveis.corWhite}} to={to}>{children}</Link></Button>
+        <Button backgroundColor={backgroundColor} color={color}><Link style={ { textDecoration: 'none', color: color}} to={to}>{children}</Link></Button>
     )
 }
 

@@ -14,8 +14,9 @@ import ButtonAction from './componentes/ButtonAction';
 import BannerTitle from './componentes/BannerTitle';
 import BannerDescription from './componentes/BannerDescription';
 import SectionCategories from './componentes/SectionCategories';
+import ScrollToTop from './componentes/ScrollToTop';
 
-const Home = styled.div`
+const Home = styled.main`
   background-color: ${variaveis.corGrayDark};
   height: 100vh;
 `;
@@ -45,6 +46,7 @@ function App() {
 
   return (
     <BrowserRouter>
+    <ScrollToTop />
     <Routes>
       <Route path="/" element={
         <Home className="App">

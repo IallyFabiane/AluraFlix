@@ -13,6 +13,7 @@ import BannerVideo from './componentes/BannerVideo';
 import ButtonAction from './componentes/ButtonAction';
 import BannerTitle from './componentes/BannerTitle';
 import BannerDescription from './componentes/BannerDescription';
+import SectionCategories from './componentes/SectionCategories';
 
 const Home = styled.div`
   background-color: ${variaveis.corGrayDark};
@@ -31,6 +32,16 @@ function App() {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetch('/db.json')
+      .then(response => response.json())
+      .then(data => setCategories(data.categories))
+      .catch(error => console.error(error));
+  }, []);
+
 
   return (
     <BrowserRouter>
@@ -62,6 +73,7 @@ function App() {
               </>
             )}
           </SectionBanner>
+          <SectionCategories categories={categories} />
           <Footer
             larguraTela={larguraTela}
             to={larguraTela < 993 ? '/novovideo' : '/'}

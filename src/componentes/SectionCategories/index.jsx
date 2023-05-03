@@ -1,8 +1,10 @@
-import styled from 'styled-components';
+import React from 'react';
+import AliceCarousel from 'react-alice-carousel';
+import 'react-alice-carousel/lib/alice-carousel.css';
 import VideoCard from '../VideoCard';
 import ButtonAction from '../ButtonAction';
 import { variaveis } from '../UI/variaveis';
-import Carousel from 'react-elastic-carousel';
+import styled from 'styled-components';
 
 const Section = styled.section`
   display: flex;
@@ -15,7 +17,6 @@ const Section = styled.section`
   background-color: ${variaveis.corGrayDark};
   overflow-x: hidden;
   margin: 0;
-
 `;
 
 const H2 = styled.h2`
@@ -37,30 +38,22 @@ const Categoria = styled.div`
 
   @media (min-width: 993px) {
     flex-direction: row;
-    margin-right: 55%;
+    margin-right: 62%;
   }
 `;
 
 const Video = styled.div`
   width: 340px;
+  margin: 0 auto;
+  padding: 0;
 
   &:hover {
     transform: scale(1.05);
   }
 
-  @media (min-width: 768px) and (max-width: 801px) {
-    width: 300px;
-  }
-  
 `;
 
 function SectionCategories({ categories }) {
-  const breakPoints = [
-    { width: 320, itemsToShow: 1 },
-    { width: 600, itemsToShow: 2 },
-    { width: 993, itemsToShow: 3 },
-  ];
-
   return (
     <>
       {Object.keys(categories).map((category, index) => (
@@ -77,26 +70,23 @@ function SectionCategories({ categories }) {
               match.toUpperCase(),
             )} da Alura`}</H2>
           </Categoria>
-          <Carousel 
-          breakPoints={breakPoints}
-          pagination={false}
-          isRTL={false}
-          showArrows={true}
-          showStatus={false}
-          showThumbs={false}
-          infiniteLoop={true}
-          autoPlay={false}
-          swipeable={true}
-          emulateTouch={true}
-          selectedItem={0}
-          dynamicHeight={true}
-          >
-            {categories[category].map((video, index) => (
+          <AliceCarousel
+            autoPlay
+            autoPlayInterval={3000}
+            mouseTracking
+            disableDotsControls
+            infinite
+            items={categories[category].map((video, index) => (
               <Video key={index}>
                 <VideoCard src={video.thumb} to={video.url} />
               </Video>
             ))}
-          </Carousel>
+            responsive={{
+              0: { items: 1 },
+              768: { items: 2 },
+              1200: { items: 3 },
+            }}
+          />
         </Section>
       ))}
     </>

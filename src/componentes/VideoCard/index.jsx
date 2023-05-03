@@ -5,7 +5,7 @@ const Img = styled.img`
     width: 100%;
 `;
 
-function VideoCard ({src, to}) {
+function VideoCard ({src, to }) {
     return (
         <Link to={to}><Img src={src} /></Link>
     )

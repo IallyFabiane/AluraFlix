@@ -20,7 +20,7 @@ const Section = styled.section`
         background-repeat: no-repeat;
         background-size: contain;
         position: relative;
-        height: 809px;
+        height: 700px;
 
         &::before {
             content: "";

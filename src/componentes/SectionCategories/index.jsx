@@ -2,8 +2,7 @@ import styled from 'styled-components';
 import VideoCard from '../VideoCard';
 import ButtonAction from '../ButtonAction';
 import { variaveis } from '../UI/variaveis';
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import Carousel from 'react-elastic-carousel';
 
 const Section = styled.section`
   display: flex;
@@ -15,11 +14,8 @@ const Section = styled.section`
   padding-bottom: 10px;
   background-color: ${variaveis.corGrayDark};
   overflow-x: hidden;
+  margin: 0;
 
-  @media (min-width: 993px) {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
 `;
 
 const H2 = styled.h2`
@@ -37,28 +33,34 @@ const Categoria = styled.div`
   flex-direction: column;
   gap: 20px;
   margin-top: 30px;
+  padding: 0;
 
   @media (min-width: 993px) {
     flex-direction: row;
-    margin: 0 350px;
+    margin-right: 55%;
   }
 `;
 
 const Video = styled.div`
   width: 340px;
-  margin: 0 auto;
 
   &:hover {
     transform: scale(1.05);
   }
 
-  @media (min-width: 768px) and (max-width: 992px) {
-    width: 748px;
+  @media (min-width: 768px) and (max-width: 801px) {
+    width: 300px;
   }
-
+  
 `;
 
 function SectionCategories({ categories }) {
+  const breakPoints = [
+    { width: 320, itemsToShow: 1 },
+    { width: 600, itemsToShow: 2 },
+    { width: 993, itemsToShow: 3 },
+  ];
+
   return (
     <>
       {Object.keys(categories).map((category, index) => (
@@ -75,17 +77,19 @@ function SectionCategories({ categories }) {
               match.toUpperCase(),
             )} da Alura`}</H2>
           </Categoria>
-          <Carousel
-            showArrows={true}
-            showStatus={false}
-            showIndicators={false}
-            showThumbs={false}
-            infiniteLoop={true}
-            autoPlay={false}
-            swipeable={true}
-            emulateTouch={true}
-            selectedItem={0}
-            dynamicHeight={true}
+          <Carousel 
+          breakPoints={breakPoints}
+          pagination={false}
+          isRTL={false}
+          showArrows={true}
+          showStatus={false}
+          showThumbs={false}
+          infiniteLoop={true}
+          autoPlay={false}
+          swipeable={true}
+          emulateTouch={true}
+          selectedItem={0}
+          dynamicHeight={true}
           >
             {categories[category].map((video, index) => (
               <Video key={index}>

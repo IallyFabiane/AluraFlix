@@ -37,12 +37,12 @@ function App() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch('/db.json')
+    fetch('http://localhost:3000/categories')
       .then(response => response.json())
-      .then(data => setCategories(data.categories))
+      .then(data => setCategories(data))
       .catch(error => console.error(error));
   }, []);
-
+  
 
   return (
     <BrowserRouter>

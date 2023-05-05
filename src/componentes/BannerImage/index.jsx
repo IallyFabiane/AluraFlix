@@ -7,7 +7,7 @@ const Img = styled.img`
 
 function BannerImage () {
     return (
-        <Img src="../../../dist/img/banner_image.png" alt="Banner"/>
+        <Img src="/img/banner_image.png" alt="Banner"/>
     )
    
 }

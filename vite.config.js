@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 // Configuração do Json-server
 const router = jsonServer.router('./db.json');
 const middlewares = jsonServer.defaults();
-const jsonServerPort = 3001; // Porta do json-server
+const jsonServerPort = 3000; // Porta do json-server
 
 app.use(middlewares);
 app.use('/categories', router);
@@ -22,7 +22,7 @@ module.exports = defineConfig({
   plugins: [react()],
   server: {
     middlewareMode: true,
-    port: 3000, // Porta do ViteExpress
+    port: 3001, // Porta do ViteExpress
     setupMiddleware: (app) => {
       const { createServer } = viteExpress({ app });
       createServer();

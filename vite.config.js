@@ -7,7 +7,7 @@ const viteExpress = require('vite-express');
 
 // Configuração do Express
 const app = express();
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Configuração do Json-server
 const router = jsonServer.router('./db.json');

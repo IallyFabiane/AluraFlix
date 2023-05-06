@@ -43,7 +43,7 @@ const Categoria = styled.div`
 `;
 
 const Video = styled.div`
-  width: 340px;
+  width: 300px;
   margin: 0 auto;
   padding: 0;
 

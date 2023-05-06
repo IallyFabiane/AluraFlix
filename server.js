@@ -15,7 +15,7 @@ async function startServer() {
   const router = jsonServer.router('./db.json');
   const middlewares = jsonServer.defaults();
 
-  app.use(express.static(path.join(__dirname, 'public')));
+  app.use(express.static(path.join(__dirname, 'dist')));
 
   app.use(viteApp.middlewares);
 

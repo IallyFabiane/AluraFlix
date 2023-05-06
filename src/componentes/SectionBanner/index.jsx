@@ -16,7 +16,7 @@ const Section = styled.section`
     }
 
     @media (min-width: 993px) {
-        background-image: url('../../../public/img/banner_image.png');
+        background-image: url('img/banner_image.png');
         background-repeat: no-repeat;
         background-size: contain;
         position: relative;

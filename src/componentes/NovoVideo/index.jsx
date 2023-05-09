@@ -1,6 +1,16 @@
-function NovoVideo () {
+import styled from "styled-components";
+import { variaveis } from "../UI/variaveis";
+
+const Body = styled.body`
+    background-color: ${variaveis.corGrayDark};
+    font-family: 'Roboto';
+    font-style: normal;
+    overflow-x: hidden;
+`;
+
+function NovoVideo ({children}) {
     return (
-        <h1>Novo vídeo</h1>
+       <Body>{children}</Body>
     )
 }
 

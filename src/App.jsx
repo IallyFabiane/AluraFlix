@@ -15,6 +15,8 @@ import BannerTitle from './componentes/BannerTitle';
 import BannerDescription from './componentes/BannerDescription';
 import SectionCategories from './componentes/SectionCategories';
 import ScrollToTop from './componentes/ScrollToTop';
+import SectionFormulario from './componentes/SectionFormulario';
+import NovaCategoria from './assets/NovaCategoria';
 
 const Home = styled.main`
   background-color: ${variaveis.corGrayDark};
@@ -83,7 +85,19 @@ function App() {
           </Footer>
         </Home>
       } />
-     <Route path="/novovideo" element={<NovoVideo />} />
+     <Route path="/novovideo" element={<NovoVideo>
+        <Header>
+            <Logo />
+          </Header>
+        <SectionFormulario titulo="Novo Vídeo" />
+        <Footer
+            larguraTela={larguraTela}
+            to={larguraTela < 993 ? '/novovideo' : '/'}
+          >
+            {larguraTela < 993 ? "Novo vídeo" : <Logo />}
+        </Footer>
+     </NovoVideo>} />
+     <Route path="/novacategoria" element={<NovaCategoria />} />
     </Routes>
     <GlobalStyle />
   </BrowserRouter>

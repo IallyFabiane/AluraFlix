@@ -38,7 +38,7 @@ const Categoria = styled.div`
 
   @media (min-width: 993px) {
     flex-direction: row;
-    margin-right: 62%;
+    margin-right: 60%;
   }
 `;
 
@@ -60,7 +60,7 @@ function SectionCategories({ categories }) {
         <Section key={index}>
           <Categoria>
             <ButtonAction
-              to="/"
+              to='https://www.alura.com.br/formacoes'
               backgroundColor={variaveis[`cor${category.replace(/-/g, '')}`]}
               color={variaveis.corWhite}
             >

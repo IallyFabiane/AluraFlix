@@ -16,6 +16,7 @@ const corInovation = "#FF8C2A";
 const corUX = "#DC6EBE";
 const corDataScience = "#9CD33B";
 const corWhite = "#FFF";
+const corInput = "#53585D";
 
 export const variaveis = {
     corPrimaria,
@@ -34,5 +35,6 @@ export const variaveis = {
     corInovation,
     corUX,
     corDataScience, 
-    corWhite
+    corWhite,
+    corInput
 };

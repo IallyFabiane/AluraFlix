@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Button = styled.button`
-  width: 120px;
+  width: 150px;
   background-color: ${(props) => props.backgroundColor};
   border: 1px solid ${(props) => props.color};
   color: ${(props) => props.color};
@@ -13,6 +13,10 @@ const Button = styled.button`
   line-height: 24px;
   padding: 10px;
   border-radius: 4px;
+
+  &:hover {
+    filter: brightness(1.1);
+  }
 `;
 
 function ButtonAction({ backgroundColor ,color, children, to }) {

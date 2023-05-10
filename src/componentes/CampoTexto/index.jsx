@@ -10,7 +10,7 @@ const style = {
 };
 
 
-function CampoTexto ({placeholder, type }) {
+function CampoTexto ({placeholder, type, onChange, value }) {
 
     const [larguraTela, setLarguraTela] = useState(window.innerWidth);
 
@@ -23,7 +23,7 @@ function CampoTexto ({placeholder, type }) {
     }, []);
 
     return (
-        <TextField multiline required type={type} id="filled-basic" label={placeholder} variant="filled" style={ style } className={larguraTela > 993 ? 'largura-1360' : 'largura'}  InputProps={{ style: { color: variaveis.corWhite } }} />
+        <TextField value={value} onChange={onChange} multiline required type={type} id="filled-basic" label={placeholder} variant="filled" style={ style } className={larguraTela > 993 ? 'largura-1360' : 'largura'}  InputProps={{ style: { color: variaveis.corWhite } }} />
     )
 }
 

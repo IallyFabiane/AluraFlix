@@ -3,6 +3,7 @@ import { variaveis } from "../UI/variaveis";
 import { FormControl, Button } from "@mui/material";
 import CampoTexto from "../CampoTexto";
 import ButtonAction from "../ButtonAction";
+import { useState } from "react";
 
 const Section = styled.section`
     display: flex;
@@ -40,18 +41,64 @@ const ButtonContainer = styled.div`
 `;
 
 function SectionFormulario ({titulo}) {
+
+    const [title, setTitle] = useState("");
+    const [video, setVideo] = useState("");
+    const [image, setImage] = useState("");
+    const [description, setDescription] = useState("");
+    const [category, setCategory] = useState("");
+    const [security, setSecurity] = useState("");
+
     return (
         <Section>
-            <FormControl>
+            <FormControl onSubmit={event => {
+                event.preventDefault();
+            }}>
                 <Legend>{titulo}</Legend>
-                <CampoTexto placeholder="Título" type="text" />
-                <CampoTexto placeholder="Link do Vídeo" type="url" />
-                <CampoTexto placeholder="Link da mensagem do Vídeo" type="url" />
-                <CampoTexto placeholder="Descrição" type="text" />
-                <CampoTexto placeholder="Escolha uma categoria" type="text" />
-                <CampoTexto placeholder="Código de Segurança" type="text" />
+                <CampoTexto  onChange={event => {
+                    setTitle(event.target.value)
+                }} 
+                placeholder="Título" 
+                type="text"
+                value={title}
+                 />
+                <CampoTexto  onChange={event => {
+                    setVideo(event.target.value)
+                }} 
+                placeholder="Link do Vídeo" 
+                type="url"
+                value={video}
+                />
+                <CampoTexto  onChange={event => {
+                    setImage(event.target.value)
+                }} 
+                placeholder="Link da imagem do Vídeo"
+                type="url"
+                value={image}
+                 />
+                <CampoTexto onChange={event => {
+                    setDescription(event.target.value)
+                }} 
+                placeholder="Descrição"
+                type="text"
+                value={description}
+                />
+                <CampoTexto onChange={event => {
+                    setCategory(event.target.value)
+                }}
+                placeholder="Escolha uma categoria"
+                type="text" 
+                value={category}
+                />
+                <CampoTexto onChange={event => {
+                    setSecurity(event.target.value)
+                }}
+                placeholder="Código de Segurança"
+                type="text"
+                value={security}
+                />
                 <ButtonContainer>
-                    <Button variant="contained">Salvar</Button>
+                    <Button onClick={ () => { console.log(title, video, image, description, category, security) }} variant="contained">Salvar</Button>
                     <Button variant="outlined">Limpar</Button>
                     <ButtonAction backgroundColor={variaveis.corPrimaria} color={variaveis.corWhite} to='/novacategoria'>NOVA CATEGORIA</ButtonAction>
                 </ButtonContainer>

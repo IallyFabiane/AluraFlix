@@ -6,7 +6,8 @@ import './campoTexto.css';
 const style = {
   borderRadius: 4,
   backgroundColor: variaveis.corInput,
-  marginBottom: 30,
+  marginTop: 20,
+  marginBottom: 20,
 };
 
 

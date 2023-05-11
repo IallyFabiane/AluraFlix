@@ -54,6 +54,7 @@ function SectionFormulario({ titulo }) {
     const [security, setSecurity] = useState('');
     const [validationError, setValidationError] = useState('');
     const [videoError, setVideoError] = useState("");
+    const [imageError, setImageError] = useState("");
 
     const handleTitleChange = (event) => {
       const value = event.target.value;
@@ -69,6 +70,12 @@ function SectionFormulario({ titulo }) {
         const value = event.target.value;
         setVideo(value);
     };
+
+    const handleImageChange = (event) => {
+        const value = event.target.value;
+        setImage(value);
+    };
+    
   
     const handleSubmit = (event) => {
 
@@ -79,11 +86,20 @@ function SectionFormulario({ titulo }) {
             return;
         }
 
-        const urlRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
+        // Expressão regular para validar a URL do vídeo
+        const urlRegexVideo = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
 
-        if (!urlRegex.test(video)) {
+        if (!urlRegexVideo.test(video)) {
             setVideoError("Link do vídeo inválido. (ex: https://www.youtube.com/watch?v=90NcVNsKGik)");
             return;
+        }
+
+         // Expressão regular para validar a URL da imagem
+        const urlRegexImg = /^(https?:\/\/)?[^\s/$.?#].[^\s]*$/;
+
+        if (!urlRegexImg.test(image)) {
+        setImageError("URL da imagem inválida. (ex: https://img.youtube.com/vi/dvd3pNYh7So/hqdefault.jpg)");
+        return;
         }
 
         console.log(title, video, image, description, category, security);
@@ -110,11 +126,12 @@ function SectionFormulario({ titulo }) {
           />
          {videoError && <Span>{videoError}</Span>}
           <CampoTexto
-            onChange={(event) => setImage(event.target.value)}
+            onChange={handleImageChange}
             placeholder="Link da imagem do Vídeo"
             type="url"
             value={image}
           />
+        {imageError && <span>{imageError}</span>}
           <CampoTexto
             onChange={(event) => setDescription(event.target.value)}
             placeholder="Descrição"

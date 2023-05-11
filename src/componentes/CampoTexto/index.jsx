@@ -1,7 +1,8 @@
 import { variaveis } from "../UI/variaveis";
 import { TextField } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import './campoTexto.css';
+import { useState } from "react";
 
 const style = {
   borderRadius: 4,
@@ -11,7 +12,7 @@ const style = {
 };
 
 
-function CampoTexto ({placeholder, type, onChange, value }) {
+function CampoTexto ({placeholder, type, onChange, required, value}) {
 
     const [larguraTela, setLarguraTela] = useState(window.innerWidth);
 
@@ -24,7 +25,7 @@ function CampoTexto ({placeholder, type, onChange, value }) {
     }, []);
 
     return (
-        <TextField value={value} onChange={onChange} multiline required type={type} id="filled-basic" label={placeholder} variant="filled" style={ style } className={larguraTela > 993 ? 'largura-1360' : 'largura'}  InputProps={{ style: { color: variaveis.corWhite } }} />
+        <TextField value={value} required={required} onChange={onChange} multiline type={type} id="filled-basic" label={placeholder} variant="filled" style={ style } className={larguraTela > 993 ? 'largura-1360' : 'largura'}  InputProps={{ style: { color: variaveis.corWhite } }} />
     )
 }
 

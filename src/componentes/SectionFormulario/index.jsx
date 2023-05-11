@@ -69,14 +69,26 @@ function SectionFormulario({ titulo }) {
     const handleVideoChange = (event) => {
         const value = event.target.value;
         setVideo(value);
+        // Expressão regular para validar a URL do vídeo
+        const urlRegexVideo = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
+        if (!urlRegexVideo.test(value)) {
+            setVideoError("Link do vídeo inválido. (ex: https://www.youtube.com/watch?v=90NcVNsKGik)");
+        } else {
+            setVideoError("");
+        }
     };
 
     const handleImageChange = (event) => {
         const value = event.target.value;
         setImage(value);
+        // Expressão regular para validar a URL da imagem
+        const urlRegexImg = /^(https?:\/\/)?[^\s/$.?#]+\.(jpg|jpeg|png|gif|bmp)$/i;
+        if (!urlRegexImg.test(value)) {
+            setImageError("URL da imagem inválida. (ex: https://img.youtube.com/vi/dvd3pNYh7So/hqdefault.jpg)");
+        } else {
+            setImageError("");
+        }
     };
-    
-  
     const handleSubmit = (event) => {
 
         event.preventDefault();
@@ -86,24 +98,21 @@ function SectionFormulario({ titulo }) {
             return;
         }
 
-        // Expressão regular para validar a URL do vídeo
-        const urlRegexVideo = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
-
-        if (!urlRegexVideo.test(video)) {
-            setVideoError("Link do vídeo inválido. (ex: https://www.youtube.com/watch?v=90NcVNsKGik)");
+        if (videoError !== "") {
             return;
         }
 
-         // Expressão regular para validar a URL da imagem
-        const urlRegexImg = /^(https?:\/\/)?[^\s/$.?#].[^\s]*$/;
-
-        if (!urlRegexImg.test(image)) {
-        setImageError("URL da imagem inválida. (ex: https://img.youtube.com/vi/dvd3pNYh7So/hqdefault.jpg)");
-        return;
+        if (imageError !== "") {
+            return;
         }
 
+        console.log('form enviado');
+    };
+
+    const handleClick = () => {
         console.log(title, video, image, description, category, security);
     };
+
   
     return (
       <Section>
@@ -116,6 +125,7 @@ function SectionFormulario({ titulo }) {
             value={title}
             error={validationError !== ''}
             helperText={validationError}
+            required
             />
           {validationError && <Span>{validationError}</Span>}
           <CampoTexto
@@ -123,6 +133,9 @@ function SectionFormulario({ titulo }) {
             placeholder="Link do Vídeo"
             type="url"
             value={video}
+            error={videoError !== ''}
+            helperText={videoError}
+            required
           />
          {videoError && <Span>{videoError}</Span>}
           <CampoTexto
@@ -130,8 +143,11 @@ function SectionFormulario({ titulo }) {
             placeholder="Link da imagem do Vídeo"
             type="url"
             value={image}
+            error={imageError !== ''}
+            helperText={imageError}
+            required
           />
-        {imageError && <span>{imageError}</span>}
+        {imageError && <Span>{imageError}</Span>}
           <CampoTexto
             onChange={(event) => setDescription(event.target.value)}
             placeholder="Descrição"
@@ -143,15 +159,17 @@ function SectionFormulario({ titulo }) {
             placeholder="Escolha uma categoria"
             type="text"
             value={category}
+            required
           />
           <CampoTexto
             onChange={(event) => setSecurity(event.target.value)}
             placeholder="Código de Segurança"
-            type="text"
+            type="number"
             value={security}
+            required={true}
           />
           <ButtonContainer>
-            <Button onClick={handleSubmit} variant="contained">
+            <Button onClick={handleClick} variant="contained">
               Salvar
             </Button>
             <Button variant="outlined">Limpar</Button>

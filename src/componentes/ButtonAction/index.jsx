@@ -21,7 +21,7 @@ const Button = styled.button`
 
 function ButtonAction({ backgroundColor ,color, children, to }) {
     return (
-        <Button backgroundColor={backgroundColor} color={color}><Link style={ { textDecoration: 'none', color: color }} to={to}>{children}</Link></Button>
+        <Button type='submit' backgroundColor={backgroundColor} color={color}><Link style={ { textDecoration: 'none', color: color }} to={to}>{children}</Link></Button>
     )
 }
 

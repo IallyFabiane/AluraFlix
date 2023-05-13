@@ -5,14 +5,14 @@ import CampoTexto from "../CampoTexto";
 import ButtonAction from "../ButtonAction";
 import { useState } from "react";
 
-const Section = styled.section`
+const Form = styled.form`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 900px;
+    height: 950px;
 
     @media (min-width: 993px) {
-        height: 700px;
+        height: 750px;
     }
 `;
 
@@ -28,6 +28,13 @@ const Legend = styled.legend`
         font-size: 60px;
         line-height: 70px;
     }
+`;
+
+const P = styled.p`
+  color: ${variaveis.corGrayLighter};
+  font-weight: bold;
+  font-size: 20px;
+  margin: 20px 0;
 `;
 
 const ButtonContainer = styled.div`
@@ -55,6 +62,7 @@ function SectionFormulario({ titulo }) {
     const [validationError, setValidationError] = useState('');
     const [videoError, setVideoError] = useState("");
     const [imageError, setImageError] = useState("");
+    const [submitted, setSubmitted] = useState(false);
 
     const handleTitleChange = (event) => {
       const value = event.target.value;
@@ -79,44 +87,54 @@ function SectionFormulario({ titulo }) {
     };
 
     const handleImageChange = (event) => {
-        const value = event.target.value;
-        setImage(value);
-        // Expressão regular para validar a URL da imagem
-        const urlRegexImg = /^(https?:\/\/)?[^\s/$.?#]+\.(jpg|jpeg|png|gif|bmp)$/i;
-        if (!urlRegexImg.test(value)) {
-            setImageError("URL da imagem inválida. (ex: https://img.youtube.com/vi/dvd3pNYh7So/hqdefault.jpg)");
-        } else {
-            setImageError("");
-        }
+      const value = event.target.value;
+      setImage(value);
+      // Expressão regular para validar a URL da imagem
+      const urlRegexImg = /^(https?:\/\/)?([^\s\/\?\.#]+\.?)+(\/[^\s]*)?$/i;
+      if (!value.trim() || !urlRegexImg.test(value.trim())) {
+        setImageError("URL da imagem inválida. (ex: https://img.youtube.com/vi/dvd3pNYh7So/hqdefault.jpg)");
+      } else {
+        setImageError("");
+      }
     };
+    
     const handleSubmit = (event) => {
 
         event.preventDefault();
 
         if (title.length < 3) {
-            setValidationError('O campo título deve conter pelo menos 3 caracteres.');
-            return;
+          setValidationError('O campo título deve conter pelo menos 3 caracteres.');
+          setSubmitted(false);
+          return;
         }
 
         if (videoError !== "") {
-            return;
+          setSubmitted(false);
+          return;
         }
 
         if (imageError !== "") {
-            return;
+          setSubmitted(false);
+          return;
         }
 
-        console.log('form enviado');
-    };
+        if (category.length === 0) {
+          setSubmitted(false);
+          return;
+        }
 
-    const handleClick = () => {
+
+        setSubmitted(true);
+
         console.log(title, video, image, description, category, security);
     };
 
+   ;
+
   
     return (
-      <Section>
-        <FormControl onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
+        <FormControl>
           <Legend>{titulo}</Legend>
           <CampoTexto
             onChange={handleTitleChange}
@@ -169,7 +187,7 @@ function SectionFormulario({ titulo }) {
             required={true}
           />
           <ButtonContainer>
-            <Button onClick={handleClick} variant="contained">
+            <Button onClick={handleSubmit} variant="contained">
               Salvar
             </Button>
             <Button variant="outlined">Limpar</Button>
@@ -177,8 +195,9 @@ function SectionFormulario({ titulo }) {
               NOVA CATEGORIA
             </ButtonAction>
           </ButtonContainer>
+          {submitted && <P>Formulário enviado com sucesso!</P>}
         </FormControl>
-      </Section>
+      </Form>
     );
   }
   

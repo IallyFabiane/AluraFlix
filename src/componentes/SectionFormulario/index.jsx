@@ -3,7 +3,7 @@ import { variaveis } from "../UI/variaveis";
 import { FormControl, Button } from "@mui/material";
 import CampoTexto from "../CampoTexto";
 import ButtonAction from "../ButtonAction";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const Form = styled.form`
     display: flex;
@@ -60,9 +60,65 @@ function SectionFormulario({ titulo }) {
     const [category, setCategory] = useState('');
     const [security, setSecurity] = useState('');
     const [validationError, setValidationError] = useState('');
-    const [videoError, setVideoError] = useState("");
-    const [imageError, setImageError] = useState("");
+    const [videoError, setVideoError] = useState('');
+    const [imageError, setImageError] = useState('');
     const [submitted, setSubmitted] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const existingData = useRef([]);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch('http://localhost:3001/categories');
+          if (!response.ok) {
+            throw new Error('Erro ao obter os dados.');
+          }
+          const data = await response.json();
+          setCategories(data);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+  
+      fetchData();
+    }, []);
+
+    const newVideo = {
+      title: title,
+      url: video,
+      thumb: image,
+    };
+
+    const categoryData = {
+      [category]: [newVideo],
+    };
+  
+    useEffect(() => {
+      const updateData = async () => {
+        try {
+          const response = await fetch('http://localhost:3001/categories');
+          if (!response.ok) {
+            throw new Error('Erro ao obter os dados atualizados.');
+          }
+          const updatedData = await response.json();
+          
+          // Armazena os dados existentes antes da atualização
+          existingData.current = updatedData;
+          
+          // Mescla os dados existentes com os novos dados da requisição POST
+          const mergedData = { ...updatedData, ...categoryData };
+          setCategories(mergedData);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      
+      if (submitted) {
+        updateData();
+      }
+      
+    }, [submitted]);
+  
 
     const handleTitleChange = (event) => {
       const value = event.target.value;
@@ -97,8 +153,13 @@ function SectionFormulario({ titulo }) {
         setImageError("");
       }
     };
+
+    const handleCategoryChange = (event) => {
+       setCategory(event.target.value);
+    };
     
-    const handleSubmit = (event) => {
+    
+    const handleSubmit = async (event) => {
 
         event.preventDefault();
 
@@ -123,13 +184,85 @@ function SectionFormulario({ titulo }) {
           return;
         }
 
+        const newVideo = {
+          title: title,
+          url: video,
+          thumb: image,
+        };
+
+        const categoryData = {
+          [category]: [newVideo],
+        };
+      
+        // Limpeza dos campos do formulário
+        setTitle("");
+        setVideo("");
+        setImage("");
+        setCategory("");
+        setSecurity("");
+
+        const existingCategory = Object.keys(categories).find(categoryKey => categoryKey === category);
+
+        if (existingCategory) {
+          if (Array.isArray(categories[existingCategory])) {
+            categories[existingCategory].push(newVideo);
+          } else {
+            categories[existingCategory] = [categories[existingCategory], newVideo];
+          }
+        } else {
+          categories[category] = [newVideo];
+        }
+      
+        try {
+          const response = await fetch('http://localhost:3001/categories', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(categoryData),
+          });
+      
+          if (!response.ok) {
+            throw new Error('Erro ao enviar o formulário.');
+          }
+      
+          console.log('Dados enviados com sucesso!');
+          setSubmitted(true);
+      
+          // Mescla os dados existentes com os novos dados da requisição POST
+          const mergedData = { ...existingData.current, ...categoryData };
+          setCategories(mergedData);
+        } catch (error) {
+          console.error(error);
+          setSubmitted(false);
+        }
+
+        try {
+          const response = await fetch('http://localhost:3001/categories', {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(categories),
+          });
+      
+          if (!response.ok) {
+            throw new Error('Erro ao enviar o formulário.');
+          }
+      
+          console.log('Dados atualizados com sucesso!');
+          setSubmitted(true);
+        } catch (error) {
+          console.error(error);
+          setSubmitted(false);
+        }
+
+      
 
         setSubmitted(true);
 
         console.log(title, video, image, description, category, security);
     };
-
-   ;
 
   
     return (
@@ -173,11 +306,11 @@ function SectionFormulario({ titulo }) {
             value={description}
           />
           <CampoTexto
-            onChange={(event) => setCategory(event.target.value)}
-            placeholder="Escolha uma categoria"
+            onChange={handleCategoryChange}
+            placeholder="Categoria"
             type="text"
             value={category}
-            required
+            required={true}
           />
           <CampoTexto
             onChange={(event) => setSecurity(event.target.value)}

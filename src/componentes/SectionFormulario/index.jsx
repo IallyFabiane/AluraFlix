@@ -193,13 +193,6 @@ function SectionFormulario({ titulo }) {
         const categoryData = {
           [category]: [newVideo],
         };
-      
-        // Limpeza dos campos do formulário
-        setTitle("");
-        setVideo("");
-        setImage("");
-        setCategory("");
-        setSecurity("");
 
         const existingCategory = Object.keys(categories).find(categoryKey => categoryKey === category);
 
@@ -264,6 +257,15 @@ function SectionFormulario({ titulo }) {
         console.log(title, video, image, description, category, security);
     };
 
+    const handleClick = (event) => {
+        // Limpeza dos campos do formulário
+        setTitle("");
+        setVideo("");
+        setImage("");
+        setCategory("");
+        setSecurity("");
+    }
+
   
     return (
       <Form onSubmit={handleSubmit}>
@@ -323,7 +325,7 @@ function SectionFormulario({ titulo }) {
             <Button onClick={handleSubmit} variant="contained">
               Salvar
             </Button>
-            <Button variant="outlined">Limpar</Button>
+            <Button onClick={handleClick} variant="outlined">Limpar</Button>
             <ButtonAction backgroundColor={variaveis.corPrimaria} color={variaveis.corWhite} to="/novacategoria">
               NOVA CATEGORIA
             </ButtonAction>

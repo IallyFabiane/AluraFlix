@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { variaveis } from '../UI/variaveis';
 
 const LogoImage = styled.img`
     width: 105px;
@@ -6,9 +8,9 @@ const LogoImage = styled.img`
     margin-left: 32px;
 `;
 
-function Logo() {
+function Logo({ to }) {
     return (
-        <LogoImage src="/img/logo.svg" alt="Logotipo" />
+        <Link style={ { textDecoration: 'none', color: variaveis.corWhite}} to={to}><LogoImage src="/img/logo.svg" alt="Logotipo" /></Link>
     )
 }
 

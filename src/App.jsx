@@ -54,7 +54,7 @@ function App() {
           <Header>
           {larguraTela > 993 ? (
               <>
-               <Logo />
+               <Logo to="/" />
                <ButtonAction color={variaveis.corWhite} backgroundColor={variaveis.corGrayDark} to="/novovideo">Novo Vídeo</ButtonAction>
               </>
             ) : (
@@ -81,21 +81,16 @@ function App() {
             larguraTela={larguraTela}
             to={larguraTela < 993 ? '/novovideo' : '/'}
           >
-            {larguraTela < 993 ? "Novo vídeo" : <Logo />}
+            {larguraTela < 993 ? "Novo vídeo" : <Logo to="/" />}
           </Footer>
         </Home>
       } />
      <Route path="/novovideo" element={<NovoVideo>
         <Header>
             <Logo />
-          </Header>
+        </Header>
         <SectionFormulario titulo="Novo Vídeo" />
-        <Footer
-            larguraTela={larguraTela}
-            to={larguraTela < 993 ? '/novovideo' : '/'}
-          >
-            {larguraTela < 993 ? "Novo vídeo" : <Logo />}
-        </Footer>
+        {larguraTela < 993 ? "" : <Footer><Logo to="/" /> </Footer>}
      </NovoVideo>} />
      <Route path="/novacategoria" element={<NovaCategoria />} />
     </Routes>

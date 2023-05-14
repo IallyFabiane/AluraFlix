@@ -194,6 +194,13 @@ function SectionFormulario({ titulo }) {
           [category]: [newVideo],
         };
 
+         // Limpeza dos campos do formulário
+         setTitle("");
+         setVideo("");
+         setImage("");
+         setCategory("");
+         setSecurity("");
+
         const existingCategory = Object.keys(categories).find(categoryKey => categoryKey === category);
 
         if (existingCategory) {
@@ -202,9 +209,7 @@ function SectionFormulario({ titulo }) {
           } else {
             categories[existingCategory] = [categories[existingCategory], newVideo];
           }
-        } else {
-          categories[category] = [newVideo];
-        }
+        } 
       
         try {
           const response = await fetch('http://localhost:3001/categories', {
@@ -250,22 +255,66 @@ function SectionFormulario({ titulo }) {
           setSubmitted(false);
         }
 
-      
-
         setSubmitted(true);
 
         console.log(title, video, image, description, category, security);
     };
 
-    const handleClick = (event) => {
-        // Limpeza dos campos do formulário
-        setTitle("");
-        setVideo("");
-        setImage("");
-        setCategory("");
-        setSecurity("");
-    }
+    const handleClick = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/categories');
+        if (!response.ok) {
+          throw new Error('Erro ao obter os dados.');
+        }
+        const serverData = await response.json();
+    
+        // Verifica se os dados inseridos estão na lista do servidor
+        const updatedData = { ...serverData };
+        let hasChanges = false;
+        Object.entries(updatedData).forEach(([category, videos]) => {
+          const updatedVideos = videos.filter(
+            (video) =>
+              video.title !== title ||
+              video.url !== newVideo.url ||
+              video.thumb !== image
+          );
+          if (updatedVideos.length !== videos.length) {
+            updatedData[category] = updatedVideos;
+            hasChanges = true;
+          }
+        });
+    
+        if (!hasChanges) {
+          console.log('Os dados inseridos não foram encontrados na lista do servidor.');
+          return;
+        }
+    
+        const deleteResponse = await fetch('http://localhost:3001/categories', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedData),
+        });
+    
+        if (!deleteResponse.ok) {
+          throw new Error('Erro ao excluir os dados do servidor.');
+        }
+    
+        console.log('Dados excluídos com sucesso!');
+        setCategories(updatedData);
+      } catch (error) {
+        console.error(error);
+      }
 
+       // Limpeza dos campos do formulário
+       setTitle("");
+       setVideo("");
+       setImage("");
+       setCategory("");
+       setSecurity("");
+    };
+    
   
     return (
       <Form onSubmit={handleSubmit}>
@@ -325,7 +374,7 @@ function SectionFormulario({ titulo }) {
             <Button onClick={handleSubmit} variant="contained">
               Salvar
             </Button>
-            <Button onClick={handleClick} variant="outlined">Limpar</Button>
+            <Button onClick={handleClick} variant="outlined">Deletar</Button>
             <ButtonAction backgroundColor={variaveis.corPrimaria} color={variaveis.corWhite} to="/novacategoria">
               NOVA CATEGORIA
             </ButtonAction>

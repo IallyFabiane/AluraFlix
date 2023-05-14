@@ -5,6 +5,7 @@ const Cabecalho = styled.header`
     max-width: 993px;
     margin: 0;
     padding: 0;
+    padding-top: 10px;
     height: 40px;
     display: flex;
     align-items: center;

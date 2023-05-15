@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { variaveis } from "../UI/variaveis";
 import CampoTexto from "../CampoTexto";
-import { FormControl, Button, InputLabel, Select, MenuItem  } from "@mui/material";
+import { FormControl, Button, InputLabel, Select, MenuItem, TableHead, TableRow, TableCell, TableBody, TableContainer, Table, Paper } from "@mui/material";
 import { useState } from "react";
 
 const Form = styled.form`
@@ -50,6 +50,24 @@ const Span =styled.span`
     color: ${variaveis.corErroDark};
 `;
 
+function createData(
+    nome,
+    descricao,
+    editar,
+    remover,
+  ) {
+    return { nome, descricao, editar, remover };
+}
+  
+const rows = [
+    createData('Front-end', 'Todos os vídeos que estou usando para estudar Front-end', 'editar', 'remover' ),
+    createData('Back-end', 'Todos os vídeos que estou usando para estudar Back-end', 'editar', 'remover'),
+    createData('Infraestrutura', 'Todos os vídeos que estou usando para estudar Infraestrutura', 'editar', 'remover'),
+    createData('Inovação', 'Todos os vídeos que estou usando para estudar Inovação', 'editar', 'remover'),
+    createData('Data-Science', 'Todos os vídeos que estou usando para estudar Dados', 'editar', 'remover'),
+    createData('Marketing', 'Todos os vídeos que estou usando para estudar Marketing', 'editar', 'remover'),
+    createData('Design & UX', 'Todos os vídeos que estou usando para estudar Design & UX', 'editar', 'remover'),
+];
 
 function SectionFormularioCategory ({ titulo, variaveis }) {
 
@@ -89,6 +107,7 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
       const getCategoriaStyles = (categoria) => categoriaCores[categoria] || {};
     
       return (
+        <>
         <Form>
           <FormControl>
             <Legend>{titulo}</Legend>
@@ -124,6 +143,36 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
             </ButtonContainer>
           </FormControl>
         </Form>
+        <TableContainer component={Paper} sx={{ minWidth: 270, maxWidth: 900, marginLeft: 6,'@media (max-width: 993px)': {
+            display: 'none',
+          },}}>
+        <Table sx={{ minWidth: 270, maxWidth: 900, backgroundColor: variaveis.corGrayLighter }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Nome</TableCell>
+              <TableCell align="right">Descrição</TableCell>
+              <TableCell align="right">Editar</TableCell>
+              <TableCell align="right">Remover</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow
+                key={row.nome}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.nome}
+                </TableCell>
+                <TableCell align="right">{row.descricao}</TableCell>
+                <TableCell align="right">{row.editar}</TableCell>
+                <TableCell align="right">{row.remover}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      </>
       );
     };
     

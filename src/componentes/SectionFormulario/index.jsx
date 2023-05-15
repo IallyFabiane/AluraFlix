@@ -51,7 +51,7 @@ const Span =styled.span`
     color: ${variaveis.corErroDark};
 `;
 
-function SectionFormulario({ titulo }) {
+function SectionFormularioVideo({ titulo }) {
 
     const [title, setTitle] = useState('');
     const [video, setVideo] = useState('');
@@ -314,7 +314,6 @@ function SectionFormulario({ titulo }) {
        setCategory("");
        setSecurity("");
     };
-    
   
     return (
       <Form onSubmit={handleSubmit}>
@@ -361,14 +360,14 @@ function SectionFormulario({ titulo }) {
             placeholder="Categoria"
             type="text"
             value={category}
-            required={true}
+            required
           />
           <CampoTexto
             onChange={(event) => setSecurity(event.target.value)}
             placeholder="Código de Segurança"
             type="number"
             value={security}
-            required={true}
+            required
           />
           <ButtonContainer>
             <Button onClick={handleSubmit} variant="contained">
@@ -385,4 +384,4 @@ function SectionFormulario({ titulo }) {
     );
   }
   
-  export default SectionFormulario;
+  export default SectionFormularioVideo;

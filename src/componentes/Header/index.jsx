@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { variaveis } from "../UI/variaveis";
 
 const Cabecalho = styled.header`
     min-width: 320px;
@@ -11,6 +12,7 @@ const Cabecalho = styled.header`
     align-items: center;
     justify-content: center;
     padding-right: 32px;
+    background-color: ${variaveis.corGrayDark};
 
     @media (min-width: 994px) {
         min-width: 1131px;

@@ -95,7 +95,7 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
             <CampoTexto placeholder="Título" type="text" required />
             <FormControl
               variant="filled"
-              sx={{ backgroundColor: variaveis.corInput, borderRadius: 1 }}
+              sx={{ backgroundColor: variaveis.corInput, borderRadius: 1, marginTop: 2, marginBottom: 2 }}
             >
               <InputLabel id="demo-simple-select-filled-label">Selecione uma opção</InputLabel>
               <Select

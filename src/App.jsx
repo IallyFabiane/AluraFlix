@@ -16,7 +16,7 @@ import BannerDescription from './componentes/BannerDescription';
 import SectionCategories from './componentes/SectionCategories';
 import ScrollToTop from './componentes/ScrollToTop';
 import NovaCategoria from './componentes/NovaCategoria';
-import SectionFormularioVideo from './componentes/SectionFormulario';
+import SectionFormularioVideo from './componentes/SectionFormularioVideo';
 import SectionFormularioCategory from './componentes/SectionFormularioCategory';
 
 const Home = styled.main`

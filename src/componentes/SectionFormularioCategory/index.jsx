@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { variaveis } from "../UI/variaveis";
 import CampoTexto from "../CampoTexto";
 import { FormControl, Button, InputLabel, Select, MenuItem, TableHead, TableRow, TableCell, TableBody, TableContainer, Table, Paper } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Form = styled.form`
     display: flex;
@@ -71,7 +71,90 @@ const rows = [
 
 function SectionFormularioCategory ({ titulo, variaveis }) {
 
+    const [category, setCategory] = useState('');
     const [selectedValue, setSelectedValue] = useState('');
+    const [descricao, setDescricao] = useState('');
+    const [codigoSeguranca, setCodigoSeguranca] = useState('');
+    const [categories, setCategories] = useState({});
+
+    useEffect(() => {
+      fetchCategories();
+    }, []);
+  
+    const fetchCategories = () => {
+      fetch("http://localhost:3001/categories")
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error("Erro ao obter a lista de categorias");
+          }
+        })
+        .then((data) => {
+          setCategories(data.categories);
+        })
+        .catch((error) => {
+          console.error("Erro ao obter a lista de categorias:", error);
+        });
+    };
+  
+    const handleCreateCategory = () => {
+      const newCategory = {
+        [category]: [
+          {
+            title: "",
+            url: "",
+            thumb: "",
+          },
+        ],
+      };
+  
+      fetch("http://localhost:3001/categories", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newCategory),
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error("Erro ao criar nova categoria");
+          }
+        })
+        .then((data) => {
+          console.log("Nova categoria criada:", data);
+          fetchCategories(); // Atualiza a lista de categorias após criar uma nova
+        })
+        .catch((error) => {
+          console.error("Erro ao criar nova categoria:", error);
+        });
+    };
+
+    
+
+    const handleCategoryChange = (event) => {
+      setCategory(event.target.value);
+    };
+  
+    const handleDescricaoChange = (event) => {
+      setDescricao(event.target.value);
+    };
+  
+    const handleCodigoSegurancaChange = (event) => {
+      setCodigoSeguranca(event.target.value);
+    };
+  
+    const handleSubmit = (event) => {
+      event.preventDefault();
+  
+      console.log('Valor do Título:', title);
+      console.log('Valor selecionado:', selectedValue);
+      console.log('Valor da Descrição:', descricao);
+      console.log('Valor do Código de Segurança:', codigoSeguranca);
+
+    };
 
     const handleSelectChange = (event) => {
         setSelectedValue(event.target.value);
@@ -108,10 +191,11 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
     
       return (
         <>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <FormControl>
             <Legend>{titulo}</Legend>
-            <CampoTexto placeholder="Título" type="text" required />
+            <CampoTexto placeholder="Categoria" type="text" value={category}
+          onChange={handleCategoryChange} required />
             <FormControl
               variant="filled"
               sx={{ backgroundColor: variaveis.corInput, borderRadius: 1, marginTop: 2, marginBottom: 2 }}
@@ -135,10 +219,12 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
                 ))}
               </Select>
             </FormControl>
-            <CampoTexto placeholder="Descrição" type="text" />
-            <CampoTexto placeholder="Código de Segurança" type="number" required />
+            <CampoTexto placeholder="Descrição" type="text" value={descricao}
+          onChange={handleDescricaoChange} />
+            <CampoTexto placeholder="Código de Segurança" type="number" value={codigoSeguranca}
+          onChange={handleCodigoSegurancaChange} required />
             <ButtonContainer>
-              <Button variant="contained">Salvar</Button>
+              <Button variant="contained" onClick={handleCreateCategory}>Salvar</Button>
               <Button variant="outlined">Deletar</Button>
             </ButtonContainer>
           </FormControl>

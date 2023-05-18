@@ -82,6 +82,8 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
     const [codigoSegurancaError, setCodigoSegurancaError] = useState('');
     const [categories, setCategories] = useState({});
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const [dataList, setDataList] = useState([]);
+    const [existingCategories, setExistingCategories] = useState([]);
 
     useEffect(() => {
       fetchCategories();
@@ -97,12 +99,34 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
           }
         })
         .then((data) => {
-          setCategories(data.categories);
+          setCategories(data);
+          setExistingCategories(data.categories);
+          setDataList(formatDataList(data));
         })
         .catch((error) => {
           console.error("Erro ao obter a lista de categorias:", error);
         });
     };
+  
+    const formatDataList = (categories) => {
+      const dataList = [];
+  
+      for (const category in categories) {
+        const categoryData = categories[category];
+  
+        for (const data of categoryData) {
+          dataList.push({
+            nome: category,
+            descricao: data.title,
+            editar: data.url,
+            remover: data.thumb,
+          });
+        }
+      }
+  
+      return dataList;
+    };
+  
   
     const handleCategoryChange = (event) => {
       if (event.target.value.trim() !== '') {
@@ -154,40 +178,68 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
       setCategoryError(categoryError);
       setSelectedValueError(selectedValueError);
       setCodigoSegurancaError(codigoSegurancaError);
-
-      const newCategory = {
-        [category]: [
-          {
-            title: "",
-            url: "",
-            thumb: "",
-          },
-        ],
-      };
-  
-      fetch("http://localhost:3001/categories", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newCategory),
-      })
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error("Erro ao criar nova categoria");
-          }
-        })
-        .then((data) => {
-          console.log("Nova categoria criada:", data);
-          fetchCategories(); // Atualiza a lista de categorias após criar uma nova
-        })
-        .catch((error) => {
-          console.error("Erro ao criar nova categoria:", error);
-        });
     
       if (categoryError === '' && selectedValueError === '' && codigoSegurancaError === '') {
+        const newCategory = {
+          [category]: [
+            {
+              title: "",
+              url: "",
+              thumb: "",
+            },
+          ],
+        };
+    
+        fetch("http://localhost:3001/categories", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newCategory),
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error("Erro ao criar nova categoria");
+            }
+          })
+          .then((data) => {
+            console.log("Nova categoria criada:", data);
+            const updatedCategories = {
+              ...categories,
+              ...newCategory,
+            };
+    
+            fetch("http://localhost:3001/categories", {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(updatedCategories),
+            })
+              .then((response) => {
+                if (response.ok) {
+                  return response.json();
+                } else {
+                  throw new Error("Erro ao atualizar categorias");
+                }
+              })
+              .then((data) => {
+                console.log("Categorias atualizadas:", data);
+                setCategories(data);
+                setDataList(formatDataList(data));
+              })
+              .catch((error) => {
+                console.error("Erro ao atualizar categorias:", error);
+              });
+    
+            fetchCategories(); // Atualiza a lista de categorias após criar uma nova
+          })
+          .catch((error) => {
+            console.error("Erro ao criar nova categoria:", error);
+          });
+    
         console.log('Valor do Categoria:', category);
         console.log('Valor selecionado:', selectedValue);
         console.log('Valor da Descrição:', descricao);
@@ -195,10 +247,17 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
     
         setFormSubmitted(true);
       }
-    };
-    
+    };    
 
     const categoriaCores = {
+        FrontEnd: {
+          color: variaveis.corGrayDark,
+          backgroundColor: variaveis.corFrontEnd,
+        },
+        BackEnd: {
+          color: variaveis.corGrayDark,
+          backgroundColor: variaveis.corBackEnd,
+        },
         Inovação: {
           color: variaveis.corGrayDark,
           backgroundColor: variaveis.corInovation,

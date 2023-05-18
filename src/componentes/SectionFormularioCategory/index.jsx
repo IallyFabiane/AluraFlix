@@ -227,6 +227,12 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
       if (category.trim() !== '') {
         handleDeleteCategory(category);
       }
+
+      // Limpeza dos campos do formulário
+      setCategory("");
+      setSelectedValue("");
+      setDescricao("");
+      setCodigoSeguranca("");
     };
     
     const handleSubmit = (event) => {
@@ -319,6 +325,12 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
         console.log('Valor do Código de Segurança:', codigoSeguranca);
     
         setFormSubmitted(true);
+
+        // Limpeza dos campos do formulário
+        setCategory("");
+        setSelectedValue("");
+        setDescricao("");
+        setCodigoSeguranca("");
       }
     };    
 

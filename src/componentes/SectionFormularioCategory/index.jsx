@@ -155,7 +155,80 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
         setSelectedValueError('O campo não pode ser vazio');
       }
     };
-  
+
+    const handleDeleteCategory = (categoryName) => {
+      const categoryUrl = `http://localhost:3000/categories/${categoryName}`;
+    
+      // Verifica se a categoria existe no servidor
+      fetch(categoryUrl)
+        .then((response) => {
+          if (response.ok) {
+            // A categoria existe, prossegue com a exclusão
+            const updatedCategories = { ...categories };
+    
+            if (updatedCategories.hasOwnProperty(categoryName)) {
+              delete updatedCategories[categoryName];
+            }
+    
+            setCategories(updatedCategories);
+            setDataList(formatDataList(updatedCategories));
+    
+            fetch(categoryUrl, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((response) => {
+                if (response.ok) {
+                  console.log("Categoria excluída com sucesso");
+                  // Atualize a lista de categorias no servidor após a exclusão
+                  fetchCategories();
+                  // Após a exclusão, envie a lista atualizada para o servidor
+                  fetch(`http://localhost:3000/categories`, {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(updatedCategories),
+                  })
+                    .then((response) => {
+                      if (response.ok) {
+                        return response.json();
+                      } else {
+                        throw new Error("Erro ao atualizar categorias");
+                      }
+                    })
+                    .then((data) => {
+                      console.log("Categorias atualizadas no servidor:", data);
+                    })
+                    .catch((error) => {
+                      console.error("Erro ao atualizar categorias no servidor:", error);
+                    });
+                } else {
+                  throw new Error("Erro ao excluir categoria");
+                }
+              })
+              .catch((error) => {
+                console.error("Erro ao excluir categoria:", error);
+              });
+          } else {
+            throw new Error("A categoria não existe no servidor");
+          }
+        })
+        .catch((error) => {
+          console.error("Erro ao verificar a categoria:", error);
+        });
+    };
+    
+    const handleDeleteFormSubmit = (event) => {
+      event.preventDefault();
+    
+      if (category.trim() !== '') {
+        handleDeleteCategory(category);
+      }
+    };
+    
     const handleSubmit = (event) => {
       event.preventDefault();
     
@@ -344,7 +417,7 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
               {codigoSegurancaError && <Span>{codigoSegurancaError}</Span>}
               <ButtonContainer>
                 <Button variant="contained" onClick={handleSubmit}>Salvar</Button>
-                <Button variant="outlined">Deletar</Button>
+                <Button variant="outlined" onClick={handleDeleteFormSubmit}>Deletar</Button>
               </ButtonContainer>
               {formSubmitted && <P>Formulário enviado com sucesso!</P>}
             </FormControl>

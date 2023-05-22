@@ -52,16 +52,6 @@ const Span =styled.span`
   color: ${variaveis.corErroDark};
 `;
 
-function createData(
-    nome,
-    descricao,
-    editar,
-    remover,
-  ) {
-    return { nome, descricao, editar, remover };
-}
-  
-
 function SectionFormularioCategory ({ titulo, variaveis }) {
 
     const [category, setCategory] = useState('');
@@ -78,6 +68,7 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
     const [editIndex, setEditIndex] = useState(null);
     const [editedNome, setEditedNome] = useState('');
     const [editedDescricao, setEditedDescricao] = useState('');
+    const [videosList, setVideosList] = useState({});
 
     const handleEdit = (index) => {
       setEditIndex(index);
@@ -86,23 +77,79 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
     };
 
     const handleSave = (index) => {
-      // Lógica para salvar os dados editados
       const updatedDataList = [...dataList];
-      updatedDataList[index].nome = editedNome;
-      updatedDataList[index].descricao = editedDescricao;
-      setDataList(updatedDataList);
-  
-      setEditIndex(null);
-      setEditedNome('');
-      setEditedDescricao('');
+      const editedCategory = updatedDataList[index].nome;
+      const editedVideoTitle = updatedDataList[index].descricao;
+    
+      // Atualize a lista de vídeos da categoria editada
+      const updatedVideosList = { ...videosList };
+      updatedVideosList[editedCategory].forEach((video) => {
+        if (video.title === editedVideoTitle) {
+          video.title = editedDescricao;
+        }
+      });
+    
+      // Atualize a lista de categorias com os vídeos atualizados
+      const updatedCategories = { ...categories, ...updatedVideosList };
+    
+      // Atualize os dados no servidor
+      fetch('http://localhost:3001/categories', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedCategories),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log('Categorias atualizadas:', updatedCategories);
+            setCategories(updatedCategories);
+            setVideosList(updatedVideosList);
+            setEditIndex(null);
+          } else {
+            throw new Error('Erro ao atualizar categorias');
+          }
+        })
+        .catch((error) => {
+          console.error('Erro ao atualizar categorias:', error);
+        });
     };
-  
+    
     const handleRemove = (index) => {
-      // Lógica para remover a linha com o índice especificado
-      const updatedDataList = dataList.filter((_, i) => i !== index);
-      setDataList(updatedDataList);
-    }
-
+      const removedCategory = dataList[index].nome;
+      const removedVideoTitle = dataList[index].descricao;
+    
+      // Remova o vídeo da lista de vídeos da categoria
+      const updatedVideosList = { ...videosList };
+      updatedVideosList[removedCategory] = updatedVideosList[removedCategory].filter(
+        (video) => video.title !== removedVideoTitle
+      );
+    
+      // Atualize a lista de categorias com os vídeos atualizados
+      const updatedCategories = { ...categories, ...updatedVideosList };
+    
+      // Atualize os dados no servidor
+      fetch('http://localhost:3001/categories', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedCategories),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log('Categorias atualizadas:', updatedCategories);
+            setCategories(updatedCategories);
+            setVideosList(updatedVideosList);
+          } else {
+            throw new Error('Erro ao atualizar categorias');
+          }
+        })
+        .catch((error) => {
+          console.error('Erro ao atualizar categorias:', error);
+        });
+    };
+    
     useEffect(() => {
       fetchCategories();
     }, []);
@@ -120,6 +167,7 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
           setCategories(data);
           setExistingCategories(data.categories);
           setDataList(formatDataList(data));
+          setVideosList(data);
         })
         .catch((error) => {
           console.error("Erro ao obter a lista de categorias:", error);
@@ -238,7 +286,7 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
           console.error("Erro ao verificar a categoria:", error);
         });
     };
-    
+  
     const handleDeleteFormSubmit = (event) => {
       event.preventDefault();
     

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { variaveis } from "../UI/variaveis";
 import CampoTexto from "../CampoTexto";
-import { FormControl, Button, InputLabel, Select, MenuItem, TableHead, TableRow, TableCell, TableBody, TableContainer, Table, Paper } from "@mui/material";
+import { FormControl, Button, InputLabel, Select, MenuItem, TextField, TableHead, TableRow, TableCell, TableBody, TableContainer, Table, Paper } from "@mui/material";
 import { useState, useEffect } from "react";
 
 const Form = styled.form`
@@ -61,15 +61,6 @@ function createData(
     return { nome, descricao, editar, remover };
 }
   
-const rows = [
-    createData('Front-end', 'Todos os vídeos que estou usando para estudar Front-end', 'editar', 'remover' ),
-    createData('Back-end', 'Todos os vídeos que estou usando para estudar Back-end', 'editar', 'remover'),
-    createData('Infraestrutura', 'Todos os vídeos que estou usando para estudar Infraestrutura', 'editar', 'remover'),
-    createData('Inovação', 'Todos os vídeos que estou usando para estudar Inovação', 'editar', 'remover'),
-    createData('Data-Science', 'Todos os vídeos que estou usando para estudar Dados', 'editar', 'remover'),
-    createData('Marketing', 'Todos os vídeos que estou usando para estudar Marketing', 'editar', 'remover'),
-    createData('Design & UX', 'Todos os vídeos que estou usando para estudar Design & UX', 'editar', 'remover'),
-];
 
 function SectionFormularioCategory ({ titulo, variaveis }) {
 
@@ -84,6 +75,33 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [dataList, setDataList] = useState([]);
     const [existingCategories, setExistingCategories] = useState([]);
+    const [editIndex, setEditIndex] = useState(null);
+    const [editedNome, setEditedNome] = useState('');
+    const [editedDescricao, setEditedDescricao] = useState('');
+
+    const handleEdit = (index) => {
+      setEditIndex(index);
+      setEditedNome(dataList[index].nome);
+      setEditedDescricao(dataList[index].descricao);
+    };
+
+    const handleSave = (index) => {
+      // Lógica para salvar os dados editados
+      const updatedDataList = [...dataList];
+      updatedDataList[index].nome = editedNome;
+      updatedDataList[index].descricao = editedDescricao;
+      setDataList(updatedDataList);
+  
+      setEditIndex(null);
+      setEditedNome('');
+      setEditedDescricao('');
+    };
+  
+    const handleRemove = (index) => {
+      // Lógica para remover a linha com o índice especificado
+      const updatedDataList = dataList.filter((_, i) => i !== index);
+      setDataList(updatedDataList);
+    }
 
     useEffect(() => {
       fetchCategories();
@@ -434,35 +452,56 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
               {formSubmitted && <P>Formulário enviado com sucesso!</P>}
             </FormControl>
           </Form>
-        <TableContainer component={Paper} sx={{ minWidth: 270, maxWidth: 900, marginLeft: 6,'@media (max-width: 993px)': {
-            display: 'none',
-          },}}>
-        <Table sx={{ minWidth: 270, maxWidth: 900, backgroundColor: variaveis.corGrayLighter }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Nome</TableCell>
-              <TableCell align="right">Descrição</TableCell>
-              <TableCell align="right">Editar</TableCell>
-              <TableCell align="right">Remover</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.nome}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.nome}
-                </TableCell>
-                <TableCell align="right">{row.descricao}</TableCell>
-                <TableCell align="right">{row.editar}</TableCell>
-                <TableCell align="right">{row.remover}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+          <TableContainer component={Paper} sx={{ minWidth: 270, maxWidth: 1000, marginLeft: 6, '@media (max-width: 993px)': { display: 'none', }}}>
+            <Table sx={{ minWidth: 270, maxWidth: 1000, backgroundColor: variaveis.corGrayLighter }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Nome</TableCell>
+                  <TableCell align="right">Descrição</TableCell>
+                  <TableCell align="right">Ações</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {dataList.map((row, index) => (
+                  <TableRow key={index}>
+                    <TableCell component="th" scope="row">
+                      {index === editIndex ? (
+                        <TextField
+                          value={editedNome}
+                          onChange={(e) => setEditedNome(e.target.value)}
+                        />
+                      ) : (
+                        row.nome
+                      )}
+                    </TableCell>
+                    <TableCell align="right">
+                      {index === editIndex ? (
+                        <TextField
+                          value={editedDescricao}
+                          onChange={(e) => setEditedDescricao(e.target.value)}
+                        />
+                      ) : (
+                        row.descricao
+                      )}
+                    </TableCell>
+                    <TableCell align="right">
+                      {index === editIndex ? (
+                        <div>
+                          <Button variant="filled" onClick={() => handleSave(index)}>Salvar</Button>
+                          <Button variant="filled" onClick={() => setEditIndex(null)}>Cancelar</Button>
+                        </div>
+                      ) : (
+                        <div>
+                          <Button variant="filled" onClick={() => handleEdit(index)}>Editar</Button>
+                          <Button variant="filled" onClick={() => handleRemove(index)}>Remover</Button>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
       </>
       );
     };

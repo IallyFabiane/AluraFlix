@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "commonjs",
-  "homepage": "https://iallyfabiane.github.io/AluraFlix",
+  "homepage": "https://iallyfabiane.github.io/AluraFlix/",
   "scripts": {
     "dev": "concurrently \"vite\" \"json-server --watch db.json\"",
     "build": "vite build",

@@ -81,7 +81,7 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
       const editedCategory = updatedDataList[index].nome;
       const editedVideoTitle = updatedDataList[index].descricao;
     
-      // Atualize a lista de vídeos da categoria editada
+      // Atualiza a lista de vídeos da categoria editada
       const updatedVideosList = { ...videosList };
       updatedVideosList[editedCategory].forEach((video) => {
         if (video.title === editedVideoTitle) {
@@ -89,10 +89,10 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
         }
       });
     
-      // Atualize a lista de categorias com os vídeos atualizados
+      // Atualiza a lista de categorias com os vídeos atualizados
       const updatedCategories = { ...categories, ...updatedVideosList };
     
-      // Atualize os dados no servidor
+      // Atualiza os dados no servidor
       fetch('http://localhost:3001/categories', {
         method: 'PUT',
         headers: {
@@ -119,16 +119,16 @@ function SectionFormularioCategory ({ titulo, variaveis }) {
       const removedCategory = dataList[index].nome;
       const removedVideoTitle = dataList[index].descricao;
     
-      // Remova o vídeo da lista de vídeos da categoria
+      // Remove o vídeo da lista de vídeos da categoria
       const updatedVideosList = { ...videosList };
       updatedVideosList[removedCategory] = updatedVideosList[removedCategory].filter(
         (video) => video.title !== removedVideoTitle
       );
     
-      // Atualize a lista de categorias com os vídeos atualizados
+      // Atualiza a lista de categorias com os vídeos atualizados
       const updatedCategories = { ...categories, ...updatedVideosList };
     
-      // Atualize os dados no servidor
+      // Atualiza os dados no servidor
       fetch('http://localhost:3001/categories', {
         method: 'PUT',
         headers: {
